@@ -1,12 +1,27 @@
 from pathlib import Path
+import os
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-9f$*8mb)2^r_wsi%qjepsztu)ao953ud2yz4o9cpwwuexq_s7='
 
-DEBUG = True
+# =========================
+# SECURITY
+# =========================
+# =1k35p(d5=j9#^+#fpntniw0o(-$g((a52yb(xs_2w^ode48fi
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY",
+    "django-development-secret-key"
+)
 
-ALLOWED_HOSTS = ['*']
+DEBUG = os.environ.get("DEBUG", "True") == "True"
+
+ALLOWED_HOSTS = ["*"]
+
+
+# =========================
+# APPLICATIONS
+# =========================
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,8 +33,17 @@ INSTALLED_APPS = [
     'core',
 ]
 
+
+# =========================
+# MIDDLEWARE
+# =========================
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    # WhiteNoise
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -27,6 +51,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+# =========================
+# URL / WSGI
+# =========================
 
 ROOT_URLCONF = 'placement_system.urls'
 
@@ -47,28 +76,41 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'placement_system.wsgi.application'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'placement_db',
-#         'USER': 'root',
-#         'PASSWORD': '1234',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-#     }
-# }
+
+# =========================
+# DATABASE
+# =========================
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+    )
 }
-}
+
+
+# =========================
+# PASSWORD VALIDATION
+# =========================
+
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'
+    },
 ]
+
+
+# =========================
+# LANGUAGE / TIME
+# =========================
 
 LANGUAGE_CODE = 'en-us'
 
@@ -78,17 +120,44 @@ USE_I18N = True
 
 USE_TZ = True
 
+
+# =========================
+# STATIC FILES
+# =========================
+
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'core' / 'static',
 ]
+
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+# =========================
+# MEDIA FILES
+# =========================
+
 MEDIA_URL = '/media/'
+
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
+# =========================
+# LOGIN
+# =========================
+
 LOGIN_URL = 'login'
+
 LOGIN_REDIRECT_URL = 'dashboard'
+
 LOGOUT_REDIRECT_URL = 'landing'
+
+
+# =========================
+# DEFAULT PRIMARY KEY
+# =========================
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
