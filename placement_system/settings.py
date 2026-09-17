@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # =========================
 # SECURITY
 # =========================
-# =1k35p(d5=j9#^+#fpntniw0o(-$g((a52yb(xs_2w^ode48fi
+
 SECRET_KEY = os.environ.get(
     "SECRET_KEY",
     "django-development-secret-key"
@@ -16,10 +16,11 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS",
-    "localhost,127.0.0.1"
-).split(",")
+ALLOWED_HOSTS = [
+    "placement-drive-management-system.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 # =========================
@@ -44,7 +45,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-    # WhiteNoise
+    # WhiteNoise for static files on Render
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -82,6 +83,7 @@ WSGI_APPLICATION = 'placement_system.wsgi.application'
 
 # =========================
 # DATABASE
+# SQLite
 # =========================
 
 DATABASES = {
@@ -136,7 +138,9 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = (
+    'whitenoise.storage.CompressedManifestStaticFilesStorage'
+)
 
 
 # =========================
