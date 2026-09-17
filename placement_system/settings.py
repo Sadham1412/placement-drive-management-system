@@ -14,7 +14,7 @@ SECRET_KEY = os.environ.get(
     "7xP9mL2k!vN5qR8@wY1cF4tD6sH9uJ2pK3mQ7nR8xV0zA4bC6dE8fG1hJ2kL5mN7pQ9rS"
 )
 
-DEBUG = os.environ.get("DEBUG", "True") == "True"
+DEBUG = os.environ.get("DEBUG", "false") == "True"
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
